@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="Y8I-6K-oNn" customClass="DescriptionCell" customModule="iOS_Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="Y8I-6K-oNn" id="mW9-de-6qe">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wed-Qy-dGE">
+                        <rect key="frame" x="15" y="11" width="60" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="nRW-yT-Scj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HM2-LF-D9b">
+                        <rect key="frame" x="83" y="11" width="277" height="22"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="HM2-LF-D9b" firstAttribute="trailing" secondItem="mW9-de-6qe" secondAttribute="trailingMargin" id="LSw-sn-lbF"/>
+                    <constraint firstItem="wed-Qy-dGE" firstAttribute="leading" secondItem="mW9-de-6qe" secondAttribute="leadingMargin" id="OzE-Yd-YYA"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="HM2-LF-D9b" secondAttribute="bottom" priority="999" id="Pmh-aM-NWG"/>
+                    <constraint firstItem="HM2-LF-D9b" firstAttribute="leading" secondItem="wed-Qy-dGE" secondAttribute="trailing" constant="8" id="Qdf-XD-hdI"/>
+                    <constraint firstItem="wed-Qy-dGE" firstAttribute="top" secondItem="mW9-de-6qe" secondAttribute="topMargin" id="j6j-Qh-qVM"/>
+                    <constraint firstItem="HM2-LF-D9b" firstAttribute="top" secondItem="mW9-de-6qe" secondAttribute="topMargin" id="nCD-ZB-8pl"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="descriptionLabel" destination="HM2-LF-D9b" id="5ee-yj-TFA"/>
+                <outlet property="nameLabel" destination="wed-Qy-dGE" id="C69-I7-iRs"/>
+            </connections>
+            <point key="canvasLocation" x="8" y="19"/>
+        </tableViewCell>
+    </objects>
+</document>
