@@ -43,6 +43,6 @@ print(message.gateway!)
 
 ### CocoaPods
 
-```bash
-pod ""
+```ruby
+pod 'IP'
 ```
