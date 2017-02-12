@@ -100,4 +100,19 @@ class IPTests: XCTestCase {
         }
     }
     
+    func testInitIP() {
+        XCTAssertNotNil(try IP(address: "192.168.1.1", port: 0))
+        XCTAssertThrowsError(try IP(address: "xxx", port: 0))
+    }
+    
+    func testNetworkAddress() {
+        XCTAssertEqual(try! IP(address: "192.168.125.130").networkAddress("255.255.255.192"),
+                       "192.168.125.128")
+    }
+    
+    func testBroadcastAddress() {
+        XCTAssertEqual(try! IP(address: "192.168.125.130").broadcastAddress("255.255.255.192"),
+                       "192.168.125.191")
+    }
+    
 }

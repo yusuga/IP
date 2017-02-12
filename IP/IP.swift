@@ -29,13 +29,28 @@ public struct IP {
     public let address: String
     public let port: UInt16
     
-    public init(version: Version, address: String, port: UInt16) throws {
+    public init(version: Version, address: String, port: UInt16 = 0) throws {
         let regex = try! NSRegularExpression(pattern: "^\(version.addressRegexPattern)$")
         
         guard regex.firstMatch(in: address,
                                range: NSRange(location: 0,
                                               length: address.characters.count)) != nil else
         {
+            throw IPError.invalidAddress(address)
+        }
+        
+        self.version = version
+        self.address = address
+        self.port = port
+    }
+    
+    public init(address: String, port: UInt16 = 0) throws {
+        guard let version = [Version.IPv4, Version.IPv6].flatMap({ version -> Version? in
+            let regex = try! NSRegularExpression(pattern: "^\(version.addressRegexPattern)$")
+            let match = regex.firstMatch(in: address, range: NSRange(location: 0,
+                                                                     length: address.characters.count))
+            return match == nil ? nil : version
+        }).first else {
             throw IPError.invalidAddress(address)
         }
         
@@ -79,6 +94,84 @@ public struct IP {
         }
         
         try self.init(version: version, address: ipInfo.0, port: ipInfo.1)
+    }
+}
+
+extension IP {
+    public func networkAddress(_ subnetMaskAddress: String) -> String? {
+        guard let source: in_addr = {
+            guard let address = self.address.cString(using: .utf8) else {
+                return nil
+            }
+            
+            var source = in_addr()
+            if inet_pton(version.type, address, &source) != 1 {
+                return nil
+            }
+            return source
+            }() else
+        {
+            return nil
+        }
+        
+        guard let subnetMask: in_addr = {
+            guard let address = subnetMaskAddress.cString(using: .utf8) else {
+                return nil
+            }
+            var source = in_addr()
+            if inet_pton(version.type, address, &source) != 1 {
+                return nil
+            }
+            return source
+            }() else
+        {
+            return nil
+        }
+        
+        var network = in_addr()
+        network.s_addr = source.s_addr & subnetMask.s_addr
+        
+        var buffer = [CChar](repeating: 0, count: Int(version.length))
+        inet_ntop(version.type, &network, &buffer, socklen_t(version.length))
+        return String(validatingUTF8: buffer)
+    }
+    
+    public func broadcastAddress(_ subnetMaskAddress: String) -> String? {
+        guard let source: in_addr = {
+            guard let address = self.address.cString(using: .utf8) else {
+                return nil
+            }
+            
+            var source = in_addr()
+            if inet_pton(version.type, address, &source) != 1 {
+                return nil
+            }
+            return source
+            }() else
+        {
+            return nil
+        }
+        
+        guard let subnetMask: in_addr = {
+            guard let address = subnetMaskAddress.cString(using: .utf8) else {
+                return nil
+            }
+            var source = in_addr()
+            if inet_pton(version.type, address, &source) != 1 {
+                return nil
+            }
+            return source
+            }() else
+        {
+            return nil
+        }
+        
+        var network = in_addr()
+        network.s_addr = source.s_addr | ( ~subnetMask.s_addr)
+        
+        var buffer = [CChar](repeating: 0, count: Int(version.length))
+        inet_ntop(version.type, &network, &buffer, socklen_t(version.length))
+        return String(validatingUTF8: buffer)
     }
 }
 
