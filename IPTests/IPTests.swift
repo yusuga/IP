@@ -108,10 +108,14 @@ class IPTests: XCTestCase {
     func testNetworkAddress() {
         XCTAssertEqual(try! IP(address: "192.168.125.130").networkAddress("255.255.255.192"),
                        "192.168.125.128")
+        XCTAssertEqual(try! IP(address: "192.168.125.130").networkAddress(26),
+                       "192.168.125.128")
     }
     
     func testBroadcastAddress() {
         XCTAssertEqual(try! IP(address: "192.168.125.130").broadcastAddress("255.255.255.192"),
+                       "192.168.125.191")
+        XCTAssertEqual(try! IP(address: "192.168.125.130").broadcastAddress(26),
                        "192.168.125.191")
     }
     

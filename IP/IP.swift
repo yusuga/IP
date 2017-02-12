@@ -97,8 +97,25 @@ public struct IP {
     }
 }
 
+
+
 extension IP {
-    public func networkAddress(_ subnetMaskAddress: String) -> String? {
+    
+    public func networkAddress(_ cidr: Int) -> String? {
+        if cidr > 32 { return nil }
+        
+        var netmask = in_addr()
+        netmask.s_addr = in_addr_t((UInt32(0xFFFFFFFF) << (32 - UInt32(cidr))) & UInt32(0xFFFFFFFF)).bigEndian
+        
+        var buffer = [CChar](repeating: 0, count: Int(version.length))
+        inet_ntop(version.type, &netmask, &buffer, socklen_t(version.length))
+        guard let address = String(validatingUTF8: buffer) else {
+            return nil
+        }
+        return networkAddress(address)
+    }
+    
+    public func networkAddress(_ netmask: String) -> String? {
         guard let source: in_addr = {
             guard let address = self.address.cString(using: .utf8) else {
                 return nil
@@ -114,8 +131,8 @@ extension IP {
             return nil
         }
         
-        guard let subnetMask: in_addr = {
-            guard let address = subnetMaskAddress.cString(using: .utf8) else {
+        guard let netmask: in_addr = {
+            guard let address = netmask.cString(using: .utf8) else {
                 return nil
             }
             var source = in_addr()
@@ -129,14 +146,28 @@ extension IP {
         }
         
         var network = in_addr()
-        network.s_addr = source.s_addr & subnetMask.s_addr
+        network.s_addr = source.s_addr & netmask.s_addr
         
         var buffer = [CChar](repeating: 0, count: Int(version.length))
         inet_ntop(version.type, &network, &buffer, socklen_t(version.length))
         return String(validatingUTF8: buffer)
     }
     
-    public func broadcastAddress(_ subnetMaskAddress: String) -> String? {
+    public func broadcastAddress(_ cidr: Int) -> String? {
+        if cidr > 32 { return nil }
+        
+        var netmask = in_addr()
+        netmask.s_addr = in_addr_t((UInt32(0xFFFFFFFF) << (32 - UInt32(cidr))) & UInt32(0xFFFFFFFF)).bigEndian
+        
+        var buffer = [CChar](repeating: 0, count: Int(version.length))
+        inet_ntop(version.type, &netmask, &buffer, socklen_t(version.length))
+        guard let address = String(validatingUTF8: buffer) else {
+            return nil
+        }
+        return broadcastAddress(address)
+    }
+    
+    public func broadcastAddress(_ netmask: String) -> String? {
         guard let source: in_addr = {
             guard let address = self.address.cString(using: .utf8) else {
                 return nil
@@ -152,8 +183,8 @@ extension IP {
             return nil
         }
         
-        guard let subnetMask: in_addr = {
-            guard let address = subnetMaskAddress.cString(using: .utf8) else {
+        guard let netmask: in_addr = {
+            guard let address = netmask.cString(using: .utf8) else {
                 return nil
             }
             var source = in_addr()
@@ -167,7 +198,7 @@ extension IP {
         }
         
         var network = in_addr()
-        network.s_addr = source.s_addr | ( ~subnetMask.s_addr)
+        network.s_addr = source.s_addr | ( ~netmask.s_addr)
         
         var buffer = [CChar](repeating: 0, count: Int(version.length))
         inet_ntop(version.type, &network, &buffer, socklen_t(version.length))
