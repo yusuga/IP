@@ -105,7 +105,8 @@ extension IP {
         if cidr > 32 { return nil }
         
         var netmask = in_addr()
-        netmask.s_addr = in_addr_t((UInt32(0xFFFFFFFF) << (32 - UInt32(cidr))) & UInt32(0xFFFFFFFF)).bigEndian
+        let xFFFFFFFF = 0xFFFFFFFF as UInt32
+        netmask.s_addr = in_addr_t(UInt32(xFFFFFFFF << (32 - UInt32(cidr))) & xFFFFFFFF).bigEndian
         
         var buffer = [CChar](repeating: 0, count: Int(version.length))
         inet_ntop(version.type, &netmask, &buffer, socklen_t(version.length))
@@ -157,7 +158,8 @@ extension IP {
         if cidr > 32 { return nil }
         
         var netmask = in_addr()
-        netmask.s_addr = in_addr_t((UInt32(0xFFFFFFFF) << (32 - UInt32(cidr))) & UInt32(0xFFFFFFFF)).bigEndian
+        let xFFFFFFFF = 0xFFFFFFFF as UInt32
+        netmask.s_addr = in_addr_t(UInt32(xFFFFFFFF << (32 - UInt32(cidr))) & xFFFFFFFF).bigEndian
         
         var buffer = [CChar](repeating: 0, count: Int(version.length))
         inet_ntop(version.type, &netmask, &buffer, socklen_t(version.length))
