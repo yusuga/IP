@@ -7,7 +7,7 @@
 //
 
 import Foundation
-#if !((arch(i386) || arch(x86_64)) && (os(iOS) || os(watchOS) || os(tvOS)))
+#if !((arch(i386) || arch(x86_64)) && (os(iOS) || os(watchOS) || os(tvOS))) || swift(>=3.2)
     import libnetwork
 #endif
 
@@ -239,8 +239,8 @@ extension RoutingMessage.Flags: CustomStringConvertible {
                 i += 1;
                 return Flag(rawValue: 1 << i)
             })
-                .flatMap { contains(RoutingMessage.Flags($0)) ? $0 : nil }
-                .flatMap { $0.description }
+                .compactMap { contains(RoutingMessage.Flags($0)) ? $0 : nil }
+                .compactMap { $0.description }
                 .joined(separator: ", ")
             + "]"
     }

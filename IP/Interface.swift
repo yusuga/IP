@@ -111,7 +111,7 @@ extension Interface {
         
         return sequence(first: firstPtr.pointee,
                         next: { $0.ifa_next?.pointee })
-            .flatMap({ Interface($0) })
+            .compactMap({ Interface($0) })
     }
 }
 
@@ -136,8 +136,8 @@ extension Interface.Flags: CustomStringConvertible {
                 i += 1;
                 return Flag(rawValue: 1 << i)
             })
-                .flatMap { contains(Interface.Flags($0)) ? $0 : nil }
-                .flatMap { $0.description }
+                .compactMap { contains(Interface.Flags($0)) ? $0 : nil }
+                .compactMap { $0.description }
                 .joined(separator: ", ")
             + "]"
     }
