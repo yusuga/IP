@@ -30,11 +30,11 @@ public struct IP {
     public let port: UInt16
     
     public init(version: Version, address: String, port: UInt16) throws {
-        let regex = try! NSRegularExpression(pattern: "^\(version.addressRegexPattern)$")
+        let regex = try NSRegularExpression(pattern: "^\(version.addressRegexPattern)$")
         
         guard regex.firstMatch(in: address,
                                range: NSRange(location: 0,
-                                              length: address.characters.count)) != nil else
+                                              length: address.count)) != nil else
         {
             throw IPError.invalidAddress(address)
         }

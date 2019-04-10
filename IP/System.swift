@@ -7,7 +7,7 @@
 //
 
 import Foundation
-#if !((arch(i386) || arch(x86_64)) && (os(iOS) || os(watchOS) || os(tvOS)))
+#if !((arch(i386) || arch(x86_64)) && (os(iOS) || os(watchOS) || os(tvOS))) || swift(>=3.2)
     import libnetwork
 #endif
 
